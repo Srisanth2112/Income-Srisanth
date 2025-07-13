@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K.G. Srisanth - Income Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a6cf7;
+            --primary-light: #8a6cf7;
+            --crypto: #f7931a;
+            --crypto-light: #f7b14a;
+            --dropshipping: #6c5acd;
+            --dropshipping-light: #9c5acd;
+            --secret: #00ff88;
+            --secret-light: #88ffc0;
+            --up: #4ade80;
+            --down: #f87171;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+            --dream-glow: rgba(0, 255, 136, 0.6);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+        }
+        
+        body {
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .bg-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(74, 108, 247, 0.1) 0%, rgba(74, 108, 247, 0) 70%);
+            animation: float 120s infinite linear;
+            z-index: -1;
+            filter: blur(1px);
+            opacity: 0.3;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50vw, 25vh) rotate(90deg); }
+            50% { transform: translate(30vw, 50vh) rotate(180deg); }
+            75% { transform: translate(-20vw, 30vh) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .profile-section {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        .profile-pic {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(74, 108, 247, 0.6);
+            margin-bottom: 15px;
+            animation: scaleIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .dream-text {
+            color: var(--text-secondary);
+            font-size: 16px;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .car-text {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        
+        .car-text:hover {
+            text-shadow: 0 0 10px var(--dream-glow);
+            transform: scale(1.05);
+        }
+        
+        .dream-highlight {
+            animation: dreamPulse 2s infinite;
+        }
+        
+        @keyframes dreamPulse {
+            0% { text-shadow: 0 0 5px var(--dream-glow); }
+            50% { text-shadow: 0 0 20px var(--dream-glow); }
+            100% { text-shadow: 0 0 5px var(--dream-glow); }
+        }
+        
+        .balance-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .balance-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .balance-amount {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .balance-amount:hover {
+            transform: scale(1.02);
+        }
+        
+        .balance-rupee {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #FFD700;
+            display: none;
+        }
+        
+        .balance-rupee-large {
+            font-size: 38px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .balance-change {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 16px;
+        }
+        
+        .change-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .up {
+            color: var(--up);
+        }
+        
+        .down {
+            color: var(--down);
+        }
+        
+        .time-change {
+            color: var(--text-secondary);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        .ist-time {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: rgba(0,0,0,0.3);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-family: monospace;
+        }
+        
+        .income-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .income-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 1s ease-out;
+            animation-fill-mode: backwards;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .income-card:nth-child(1) { animation-delay: 0.3s; }
+        .income-card:nth-child(2) { animation-delay: 0.6s; }
+        .income-card:nth-child(3) { animation-delay: 0.9s; }
+        
+        .secret-wallet {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .secret-wallet::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.2) 0%, rgba(0,0,0,0) 70%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+        
+        .secret-wallet::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,0,0,0));
+            border-radius: 16px;
+            z-index: -1;
+        }
+        
+        @keyframes secretGlow {
+            0% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.6); }
+            100% { box-shadow: 0 0 10px rgba(0, 255, 136, 0.3); }
+        }
+        
+        .secret-wallet {
+            animation: secretGlow 3s infinite ease-in-out;
+        }
+        
+        .income-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        
+        .income-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        .income-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 20px;
+            overflow: hidden;
+        }
+        
+        .ai-tools .income-icon {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            box-shadow: 0 5px 15px rgba(74, 108, 247, 0.4);
+        }
+        
+        .dropshipping .income-icon {
+            background: linear-gradient(135deg, var(--dropshipping), var(--dropshipping-light));
+            box-shadow: 0 5px 15px rgba(108, 90, 205, 0.4);
+        }
+        
+        .secret-wallet .income-icon {
+            background: linear-gradient(135deg, var(--secret), var(--secret-light));
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+        }
+        
+        .income-icon img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+        }
+        
+        .income-value {
+            text-align: right;
+        }
+        
+        .income-amount {
+            font-size: 26px;
+            font-weight: 700;
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 3px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .income-amount:hover {
+            transform: scale(1.05);
+        }
+        
+        .income-rupee {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 3px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #FFD700;
+            display: none;
+        }
+        
+        .income-rupee-large {
+            font-size: 26px;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+        
+        .secret-wallet .income-amount {
+            color: var(--secret);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+        
+        .income-change {
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        .income-graph {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .graph-bar {
+            height: 100%;
+            border-radius: 4px;
+            position: relative;
+            width: 0%;
+            transition: width 3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .ai-tools .graph-bar {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        }
+        
+        .dropshipping .graph-bar {
+            background: linear-gradient(90deg, var(--dropshipping), var(--dropshipping-light));
+        }
+        
+        .secret-wallet .graph-bar {
+            background: linear-gradient(90deg, var(--secret), var(--secret-light));
+        }
+        
+        .graph-sparkle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: sparkle 5s infinite;
+            opacity: 0.6;
+        }
+        
+        .video-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .video-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .video-container {
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        .video-container iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+            border-radius: 12px;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dream-section {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.6); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes sparkle {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes counting {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .counting {
+            animation: counting 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @media (max-width: 400px) {
+            .balance-amount, .balance-rupee {
+                font-size: 36px;
+            }
+            
+            .income-amount, .income-rupee {
+                font-size: 22px;
+            }
+            
+            .name {
+                font-size: 24px;
+            }
+            
+            .ist-time {
+                top: 15px;
+                right: 15px;
+                font-size: 11px;
+            }
+            
+            .video-container iframe {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-particle" style="width: 300px; height: 300px; top: 20%; left: 10%;"></div>
+    <div class="bg-particle" style="width: 200px; height: 200px; top: 60%; left: 70%; animation-delay: 20s;"></div>
+    
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-container">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <iframe id="dreamVideo" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="profile-section">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgVFFCd_6_KqmWRi8EMbJFmf8opSBV-zil1cldSOPf_Wa-UMh5GG708_fS_l_pncMvUSg0lc7_B4mmaTqMvpYUEBMq2HjMY9NXAP6TvDn3vjMSuR2LmiH83AOQ-2xqjwLKszEQf6SEeLnm_7Wlpj5D_49iioRzUoD4iKzfdFGEMinQQRVq9tdJeo3oNkbn_/s1440/IMG_20250612_102340_912.webp" alt="Profile" class="profile-pic">
+            <h1 class="name">K.G. Srisanth</h1>
+            <div class="dream-section">
+                <p class="dream-text">My Dream</p>
+                <p class="car-text dream-highlight" id="dreamCars">BMW M8 · Rolls Royce</p>
+            </div>
+        </div>
+        
+        <div class="balance-card">
+            <div class="ist-time" id="istTime">IST: Loading Time...</div>
+            <div class="balance-title">TOTAL BALANCE</div>
+            <div class="balance-amount" id="totalBalance">$121,523</div>
+            <div class="balance-rupee" id="totalBalanceRupee">₹1,01,47,932</div>
+            <div class="balance-change">
+                <div class="change-indicator">
+                    <span id="changeDirection">↗︎</span>
+                    <span id="changeAmount">$0</span>
+                    <span id="changePercent">(0%)</span>
+                </div>
+                <div class="time-change" id="timeChange">30m change: $0 (0%)</div>
+            </div>
+        </div>
+        
+        <div class="income-cards">
+            <div class="income-card dropshipping">
+                <div class="income-header">
+                    <div class="income-title">
+                        <div class="income-icon">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgEP1uUtkgUtEFBm31sj7cBccakGVXHR-YRIiSMdFpNX7D2Zd9XhyphenhyphenSeJKSTNZmqsDg1LMrXeNeA5MEdSaMF0Kxmizll2chESnYf7vrVL30ttVHFk85dz9rIZrUvDrpcFpDLGvZIKCFNtohU3QFtkfFeleYyDJot-v-b7sD_ZftF8LZA_eTVj5gZUTKuHjhu/s1024/1592422.png" alt="Dropshipping">
+                        </div>
+                        Dropshipping
+                    </div>
+                    <div class="income-value">
+                        <div class="income-amount" id="dropshippingAmount">$5,236</div>
+                        <div class="income-rupee" id="dropshippingRupee">₹4,37,412</div>
+                        <div class="income-change up" id="dropshippingChange">↗︎ $147 (2.9%)</div>
+                    </div>
+                </div>
+                <div class="income-graph">
+                    <div class="graph-bar" style="width: 85%">
+                        <div class="graph-sparkle"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="income-card ai-tools">
+                <div class="income-header">
+                    <div class="income-title">
+                        <div class="income-icon">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi2j8mVUsnIDxVvfpPPQL2hPdO__blggCslNQivRnTJBEQcMuOPPIt6kbhIBoSCJbIkb1pODxJ9-_dmbKsAn2-EcMvdUsmJHoXLerrAF7OquXtuzU01hg8abZa27aGLxGqXqCG9bSxeiY2ZeZdEQGA05uhU2NwRO-7-OH1Hpt-SSlD4XTCFUoIshq10WT8c/s512/0_jr2Z-8jnN5uKbjT_.webp" alt="Freelancer">
+                        </div>
+                        Freelancer
+                    </div>
+                    <div class="income-value">
+                        <div class="income-amount" id="aiAmount">$6,134</div>
+                        <div class="income-rupee" id="aiRupee">₹5,12,593</div>
+                        <div class="income-change up" id="aiChange">↗︎ $134 (2.2%)</div>
+                    </div>
+                </div>
+                <div class="income-graph">
+                    <div class="graph-bar" style="width: 82%">
+                        <div class="graph-sparkle"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="income-card secret-wallet">
+                <div class="income-header">
+                    <div class="income-title">
+                        <div class="income-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" alt="Secret Wallet">
+                        </div>
+                        Secret Wallet
+                    </div>
+                    <div class="income-value">
+                        <div class="income-amount" id="secretAmount">$110,153</div>
+                        <div class="income-rupee" id="secretRupee">₹92,02,927</div>
+                        <div class="income-change up" id="secretChange">↗︎ $2,153 (2.0%)</div>
+                    </div>
+                </div>
+                <div class="income-graph">
+                    <div class="graph-bar" style="width: 95%">
+                        <div class="graph-sparkle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const config = {
+            baseValues: {
+                dropshipping: 5236,
+                ai: 6134,
+                secret: 110153
+            },
+            exchangeRate: 83.5, // USD to INR
+            fluctuationRange: 200,
+            updateInterval: 1800000, // 30 minutes
+            totalBalance: 121523,
+            history: [],
+            trendBias: 0.8, // 80% chance of increase
+            dreamVideos: [
+                "https://www.youtube.com/embed/eQ-6lZkzXh8?autoplay=1", // BMW M8 video
+                "https://www.youtube.com/embed/3j9yVxV6New?autoplay=1"  // Rolls Royce video
+            ]
+        };
+        
+        // DOM Elements
+        const videoModal = document.getElementById('videoModal');
+        const dreamVideo = document.getElementById('dreamVideo');
+        const closeModal = document.getElementById('closeModal');
+        const dreamCars = document.getElementById('dreamCars');
+        
+        // Format currency
+        function formatCurrency(amount, isRupee = false) {
+            if (isRupee) {
+                return '₹' + amount.toLocaleString('en-IN');
+            }
+            return '$' + amount.toLocaleString('en-US');
+        }
+        
+        // Convert USD to INR
+        function convertToRupees(usdAmount) {
+            return Math.round(usdAmount * config.exchangeRate);
+        }
+        
+        // Calculate percentage change
+        function calculateChange(newVal, oldVal) {
+            if (oldVal === 0) return { value: 0, percent: 0, direction: 'up' };
+            
+            const diff = newVal - oldVal;
+            const percent = (diff / oldVal * 100).toFixed(2);
+            return {
+                value: diff,
+                percent: Math.abs(percent),
+                direction: diff >= 0 ? 'up' : 'down'
+            };
+        }
+        
+        // Generate new value with 2.2% average increase
+        function generateNewValue(current, base, range) {
+            const willIncrease = Math.random() < config.trendBias;
+            let baseChange = base * 0.022 * (0.8 + Math.random() * 0.4);
+            const randomChange = (Math.random() * range * 2) - range;
+            
+            let newValue = willIncrease 
+                ? base + baseChange + randomChange * 0.3
+                : base - (base * 0.01) + randomChange * 0.5;
+            
+            return Math.round(Math.max(base - range, Math.min(base + range * 1.5, newValue)));
+        }
+        
+        // Update IST Time (Bulletproof Method)
+        function updateISTTime() {
+            const now = new Date();
+            // IST is UTC+5:30 (5.5 hours = 19800000 ms)
+            const istTime = new Date(now.getTime() + 19800000);
+            
+            const hours = istTime.getUTCHours();
+            const minutes = istTime.getUTCMinutes();
+            const seconds = istTime.getUTCSeconds();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const hours12 = hours % 12 || 12;
+            
+            const day = istTime.getUTCDate();
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const month = monthNames[istTime.getUTCMonth()];
+            
+            document.getElementById('istTime').textContent = 
+                `IST: ${hours12}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${ampm} · ${day} ${month}`;
+        }
+        
+        // Update all values
+        function updateValues() {
+            // Store previous values
+            const prevValues = {
+                dropshipping: config.baseValues.dropshipping,
+                ai: config.baseValues.ai,
+                secret: config.baseValues.secret,
+                total: config.totalBalance
+            };
+            
+            // Generate new values
+            config.baseValues.dropshipping = generateNewValue(
+                config.baseValues.dropshipping, 
+                config.baseValues.dropshipping, 
+                config.fluctuationRange * 0.5
+            );
+            
+            config.baseValues.ai = generateNewValue(
+                config.baseValues.ai, 
+                config.baseValues.ai, 
+                config.fluctuationRange * 0.6
+            );
+            
+            config.baseValues.secret = generateNewValue(
+                config.baseValues.secret, 
+                config.baseValues.secret, 
+                config.fluctuationRange * 2
+            );
+            
+            config.totalBalance = config.baseValues.dropshipping + config.baseValues.ai + config.baseValues.secret;
+            
+            // Calculate changes
+            const dropshippingChange = calculateChange(config.baseValues.dropshipping, prevValues.dropshipping);
+            const aiChange = calculateChange(config.baseValues.ai, prevValues.ai);
+            const secretChange = calculateChange(config.baseValues.secret, prevValues.secret);
+            const totalChange = calculateChange(config.totalBalance, prevValues.total);
+            
+            // Update DOM with animation
+            animateValue('totalBalance', prevValues.total, config.totalBalance, formatCurrency);
+            animateValue('totalBalanceRupee', 
+                convertToRupees(prevValues.total), 
+                convertToRupees(config.totalBalance), 
+                (amount) => formatCurrency(amount, true)
+            );
+            
+            animateValue('dropshippingAmount', prevValues.dropshipping, config.baseValues.dropshipping, formatCurrency);
+            animateValue('dropshippingRupee', 
+                convertToRupees(prevValues.dropshipping), 
+                convertToRupees(config.baseValues.dropshipping), 
+                (amount) => formatCurrency(amount, true)
+            );
+            
+            animateValue('aiAmount', prevValues.ai, config.baseValues.ai, formatCurrency);
+            animateValue('aiRupee', 
+                convertToRupees(prevValues.ai), 
+                convertToRupees(config.baseValues.ai), 
+                (amount) => formatCurrency(amount, true)
+            );
+            
+            animateValue('secretAmount', prevValues.secret, config.baseValues.secret, formatCurrency);
+            animateValue('secretRupee', 
+                convertToRupees(prevValues.secret), 
+                convertToRupees(config.baseValues.secret), 
+                (amount) => formatCurrency(amount, true)
+            );
+            
+            // Update change indicators
+            document.getElementById('dropshippingChange').innerHTML = 
+                `${dropshippingChange.direction === 'up' ? '↗︎' : '↘︎'} $${Math.abs(dropshippingChange.value)} (${dropshippingChange.percent}%)`;
+            document.getElementById('dropshippingChange').className = `income-change ${dropshippingChange.direction}`;
+            
+            document.getElementById('aiChange').innerHTML = 
+                `${aiChange.direction === 'up' ? '↗︎' : '↘︎'} $${Math.abs(aiChange.value)} (${aiChange.percent}%)`;
+            document.getElementById('aiChange').className = `income-change ${aiChange.direction}`;
+            
+            document.getElementById('secretChange').innerHTML = 
+                `${secretChange.direction === 'up' ? '↗︎' : '↘︎'} $${Math.abs(secretChange.value)} (${secretChange.percent}%)`;
+            document.getElementById('secretChange').className = `income-change ${secretChange.direction}`;
+            
+            document.getElementById('changeDirection').textContent = totalChange.direction === 'up' ? '↗︎' : '↘︎';
+            document.getElementById('changeAmount').textContent = `$${Math.abs(totalChange.value)}`;
+            document.getElementById('changePercent').textContent = `(${totalChange.percent}%)`;
+            document.getElementById('timeChange').textContent = 
+                `30m change: $${Math.abs(totalChange.value)} (${totalChange.percent}%)`;
+            
+            // Store history
+            config.history.push({
+                time: new Date(),
+                values: {...config.baseValues},
+                total: config.totalBalance
+            });
+            
+            if (config.history.length > 10) {
+                config.history.shift();
+            }
+        }
+        
+        // Animate value counting
+        function animateValue(id, start, end, formatter) {
+            const element = document.getElementById(id);
+            const duration = 1000;
+            const startTime = Date.now();
+            
+            function update() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const value = Math.floor(start + (end - start) * progress);
+                
+                element.textContent = formatter(value);
+                element.classList.add('counting');
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    setTimeout(() => element.classList.remove('counting'), 100);
+                }
+            }
+            
+            update();
+        }
+        
+        // Toggle rupee conversion
+        function setupCurrencyToggle() {
+            const elements = [
+                { usd: 'totalBalance', rupee: 'totalBalanceRupee' },
+                { usd: 'dropshippingAmount', rupee: 'dropshippingRupee' },
+                { usd: 'aiAmount', rupee: 'aiRupee' },
+                { usd: 'secretAmount', rupee: 'secretRupee' }
+            ];
+            
+            elements.forEach(el => {
+                const usdElement = document.getElementById(el.usd);
+                const rupeeElement = document.getElementById(el.rupee);
+                
+                usdElement.addEventListener('click', () => {
+                    usdElement.style.display = 'none';
+                    rupeeElement.style.display = 'block';
+                    rupeeElement.classList.add('income-rupee-large');
+                });
+                
+                rupeeElement.addEventListener('click', () => {
+                    rupeeElement.style.display = 'none';
+                    rupeeElement.classList.remove('income-rupee-large');
+                    usdElement.style.display = 'block';
+                });
+            });
+        }
+        
+        // Setup dream cars video modal
+        function setupDreamModal() {
+            let currentVideoIndex = 0;
+            
+            dreamCars.addEventListener('click', () => {
+                // Toggle between videos
+                currentVideoIndex = (currentVideoIndex + 1) % config.dreamVideos.length;
+                dreamVideo.src = config.dreamVideos[currentVideoIndex];
+                videoModal.classList.add('active');
+            });
+            
+            closeModal.addEventListener('click', () => {
+                videoModal.classList.remove('active');
+                dreamVideo.src = '';
+            });
+            
+            videoModal.addEventListener('click', (e) => {
+                if (e.target === videoModal) {
+                    videoModal.classList.remove('active');
+                    dreamVideo.src = '';
+                }
+            });
+        }
+        
+        // Initialize
+        function init() {
+            updateISTTime();
+            setInterval(updateISTTime, 1000);
+            
+            updateValues();
+            setInterval(updateValues, config.updateInterval);
+            
+            setupCurrencyToggle();
+            setupDreamModal();
+        }
+        
+        // Start when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
